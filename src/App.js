@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import SignupPage from './pages/SignupPage';
+import PostListPage from './pages/PostListPage';
+import RootLayout from './components/RootLayout';
+import { CookiesProvider } from 'react-cookie'
+import PrivateRoute from './components/PrivateRoute';
+import HomePage from './pages/HomePage';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const router = createBrowserRouter(createRoutesFromElements(
+        <Route path='/' element={<RootLayout/>}>
+            <Route path="/" element={<HomePage/>} />
+            <Route path="/signup" element={<SignupPage/>} />
+            <Route element={<PrivateRoute/>}>
+                <Route path="/posts" element={<PostListPage/>} />
+            </Route>
+        </Route>
+
+    ))
+    return (
+        <div className='App'>
+            <CookiesProvider>
+                <RouterProvider router={router} />
+            </CookiesProvider>
+        </div>
+
+    );
+};
 
 export default App;
+
